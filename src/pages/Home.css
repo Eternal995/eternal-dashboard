@@ -1,0 +1,57 @@
+.home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem;
+  max-width: 600px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.divider {
+  width: 100px;
+  height: 4px;
+  background: rgba(255,255,255,0.5);
+  margin: 2rem auto;
+  border-radius: 2px;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  margin-bottom: 3rem;
+}
+
+.enter-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: white;
+  color: #667eea;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.enter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
