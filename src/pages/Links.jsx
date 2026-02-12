@@ -1,89 +1,212 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import "./Links.css";
+import LineIcon from "../components/LineIcon";
 
-// 你的服务数据 - 以后加新的直接在这里添加
-const services = [
+const commonSites = [
   {
-    name: "文件站",
-    description: "个人NAS文件服务",
-    url: "https://files.eternal995.com",
-    icon: "📁",
-    color: "#4299e1",
+    name: "Bilibili",
+    description: "视频与社区",
+    url: "https://www.bilibili.com/",
+    iconKey: "video",
+    color: "#00a1d6",
   },
   {
-    name: "鸣潮登录",
-    description: "游戏数据查询助手",
-    url: "https://login.eternal995.com",
-    icon: "🔑",
-    color: "#48bb78",
+    name: "YouTube",
+    description: "视频平台",
+    url: "https://www.youtube.com/",
+    iconKey: "video",
+    color: "#ff0000",
   },
   {
-    name: "NapCat",
-    description: "QQ机器人服务",
-    url: "https://napcat.eternal995.com",
-    icon: "🤖",
-    color: "#ed8936",
+    name: "NGA",
+    description: "论坛社区",
+    url: "https://nga.178.com/",
+    iconKey: "community",
+    color: "#2f855a",
   },
   {
-    name: "图床",
-    description: "图片托管服务",
-    url: "https://img.eternal995.com",
-    icon: "🖼️",
-    color: "#9f7aea",
+    name: "Reddit",
+    description: "话题社区",
+    url: "https://www.reddit.com/",
+    iconKey: "community",
+    color: "#ff4500",
   },
   {
-    name: "短链",
-    description: "链接缩短服务",
-    url: "https://go.eternal995.com",
-    icon: "🔗",
-    color: "#f56565",
+    name: "X",
+    description: "社交动态",
+    url: "https://x.com/",
+    iconKey: "community",
+    color: "#111827",
   },
   {
-    name: "博客",
-    description: "技术笔记",
-    url: "https://blog.eternal995.com",
-    icon: "📝",
-    color: "#38b2ac",
+    name: "DeepSeek",
+    description: "AI 对话",
+    url: "https://chat.deepseek.com/",
+    iconKey: "chat",
+    color: "#2563eb",
+  },
+  {
+    name: "Google Home",
+    description: "家庭控制台",
+    url: "https://home.google.com/u/0/",
+    iconKey: "home",
+    color: "#0f9d58",
   },
 ];
 
 function Links() {
+  const [searchEngine, setSearchEngine] = useState("google");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getEngineName = (engine) => {
+    const map = {
+      google: "Google",
+      baidu: "百度",
+      bing: "Bing",
+      yandex: "Yandex",
+    };
+    return map[engine];
+  };
+
+  const getSearchUrl = (engine, query) => {
+    const encoded = encodeURIComponent(query);
+    const urls = {
+      google: `https://www.google.com/search?q=${encoded}`,
+      baidu: `https://www.baidu.com/s?wd=${encoded}`,
+      bing: `https://www.bing.com/search?q=${encoded}`,
+      yandex: `https://yandex.com/search/?text=${encoded}`,
+    };
+    return urls[engine];
+  };
+
   return (
     <div className="links-page">
       <nav className="nav">
-        <Link to="/" className="back-home">
-          ← 返回主页
+        <Link to="/" className="nav-brand">
+          Eternal
         </Link>
-        <h1 className="nav-title">服务导航</h1>
-        <div className="nav-placeholder"></div>
+        <div className="nav-links">
+          <Link to="/" className="nav-link">
+            主页
+          </Link>
+          <Link to="/tools" className="nav-link">
+            工具
+          </Link>
+          <Link to="/games" className="nav-link">
+            游戏
+          </Link>
+          <Link to="/about" className="nav-link">
+            关于
+          </Link>
+        </div>
+        <div className="nav-spacer"></div>
       </nav>
 
-      <div className="services-grid">
-        {services.map((service, index) => (
-          <a
-            key={index}
-            href={service.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="service-card"
-            style={{ borderTopColor: service.color }}
+      {/* 搜索栏 - 带搜索框 */}
+      <div className="search-section">
+        <h2 className="search-title">🔍 搜索引擎</h2>
+
+        {/* 搜索引擎切换按钮 */}
+        <div className="engine-selector">
+          <button
+            className={`engine-btn ${searchEngine === "google" ? "active" : ""}`}
+            onClick={() => setSearchEngine("google")}
+            style={{
+              background: searchEngine === "google" ? "#4285F4" : "#f1f3f4",
+            }}
           >
-            <div
-              className="service-icon"
-              style={{ backgroundColor: `${service.color}20` }}
-            >
-              <span style={{ color: service.color }}>{service.icon}</span>
-            </div>
-            <div className="service-info">
-              <h3>{service.name}</h3>
-              <p>{service.description}</p>
-              <span className="service-link">
-                {service.url.replace("https://", "")}
-              </span>
-            </div>
-          </a>
-        ))}
+            Google
+          </button>
+          <button
+            className={`engine-btn ${searchEngine === "baidu" ? "active" : ""}`}
+            onClick={() => setSearchEngine("baidu")}
+            style={{
+              background: searchEngine === "baidu" ? "#4E6EF2" : "#f1f3f4",
+            }}
+          >
+            百度
+          </button>
+          <button
+            className={`engine-btn ${searchEngine === "bing" ? "active" : ""}`}
+            onClick={() => setSearchEngine("bing")}
+            style={{
+              background: searchEngine === "bing" ? "#008373" : "#f1f3f4",
+            }}
+          >
+            Bing
+          </button>
+          <button
+            className={`engine-btn ${searchEngine === "yandex" ? "active" : ""}`}
+            onClick={() => setSearchEngine("yandex")}
+            style={{
+              background: searchEngine === "yandex" ? "#FF3333" : "#f1f3f4",
+            }}
+          >
+            Yandex
+          </button>
+        </div>
+
+        {/* 搜索框 */}
+        <div className="search-box-container">
+          <input
+            type="text"
+            className="search-input"
+            placeholder={`在 ${getEngineName(searchEngine)} 中搜索...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchQuery.trim()) {
+                const url = getSearchUrl(searchEngine, searchQuery);
+                window.open(url, "_blank");
+                setSearchQuery("");
+              }
+            }}
+          />
+          <button
+            className="search-button"
+            onClick={() => {
+              if (searchQuery.trim()) {
+                const url = getSearchUrl(searchEngine, searchQuery);
+                window.open(url, "_blank");
+                setSearchQuery("");
+              }
+            }}
+          >
+            搜索
+          </button>
+        </div>
       </div>
+
+      <section className="services-section">
+        <h2 className="section-title">🌐 常用网站</h2>
+        <div className="services-grid">
+          {commonSites.map((service, index) => (
+            <a
+              key={index}
+              href={service.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="service-card"
+              style={{ borderTopColor: service.color }}
+            >
+              <div
+                className="service-icon"
+                style={{ backgroundColor: `${service.color}20`, color: service.color }}
+              >
+                <LineIcon name={service.iconKey} className="line-icon" />
+              </div>
+              <div className="service-info">
+                <h3>{service.name}</h3>
+                <p>{service.description}</p>
+                <span className="service-link">
+                  {service.url.replace("https://", "")}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
       <footer className="footer">
         <p>© 2026 eternal995.com · 自部署 · 自用</p>
