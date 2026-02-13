@@ -53,11 +53,24 @@ const commonSites = [
     iconKey: "home",
     color: "#0f9d58",
   },
+  {
+    name: "Gmail1",
+    description: "a139490227",
+    url: "https://mail.google.com/mail/u/0/?tab=wm#inbox",
+    iconKey: "mail",
+    color: "#ea4335",
+  },
+  {
+    name: "Gmail2",
+    description: "longyongda",
+    url: "https://mail.google.com/mail/u/1/#inbox",
+    iconKey: "mail",
+    color: "#ea4335",
+  },
 ];
 
 function Links() {
   const [searchEngine, setSearchEngine] = useState("google");
-  const [searchMode, setSearchMode] = useState("web");
   const [searchQuery, setSearchQuery] = useState("");
 
   const getEngineName = (engine) => {
@@ -81,22 +94,9 @@ function Links() {
     return urls[engine];
   };
 
-  const getImageSearchUrl = (engine, query) => {
-    const encoded = encodeURIComponent(query);
-    const urls = {
-      google: `https://www.google.com/search?tbm=isch&q=${encoded}`,
-      baidu: `https://image.baidu.com/search/index?tn=baiduimage&word=${encoded}`,
-      bing: `https://www.bing.com/images/search?q=${encoded}`,
-      yandex: `https://yandex.com/images/search?text=${encoded}`,
-    };
-    return urls[engine];
-  };
-
   const getPlaceholder = () => {
     const name = getEngineName(searchEngine);
-    return searchMode === "image"
-      ? `在 ${name} 中搜图片...`
-      : `在 ${name} 中搜索...`;
+    return `在 ${name} 中搜索...`;
   };
 
   const handleSearch = () => {
@@ -104,10 +104,7 @@ function Links() {
       return;
     }
 
-    const url =
-      searchMode === "image"
-        ? getImageSearchUrl(searchEngine, searchQuery)
-        : getSearchUrl(searchEngine, searchQuery);
+    const url = getSearchUrl(searchEngine, searchQuery);
     window.open(url, "_blank");
     setSearchQuery("");
   };
@@ -189,23 +186,6 @@ function Links() {
           </button>
         </div>
 
-        <div className="search-mode">
-          <button
-            className={`mode-btn ${searchMode === "web" ? "active" : ""}`}
-            type="button"
-            onClick={() => setSearchMode("web")}
-          >
-            网页
-          </button>
-          <button
-            className={`mode-btn ${searchMode === "image" ? "active" : ""}`}
-            type="button"
-            onClick={() => setSearchMode("image")}
-          >
-            图片
-          </button>
-        </div>
-
         {/* 搜索框 */}
         <div className="search-box-container">
           <input
@@ -225,20 +205,18 @@ function Links() {
           </button>
         </div>
 
-        {searchMode === "image" && (
-          <div className="image-search-form">
-            <div className="image-actions">
-              <button
-                className="image-submit"
-                type="button"
-                onClick={handleOpenImageSearch}
-              >
-                打开 Google 搜图
-              </button>
-              <span className="image-note">在页面内自行上传图片</span>
-            </div>
+        <div className="image-search-form">
+          <div className="image-actions">
+            <button
+              className="image-submit"
+              type="button"
+              onClick={handleOpenImageSearch}
+            >
+              打开 Google 搜图
+            </button>
+            <span className="image-note">在页面内自行上传图片</span>
           </div>
-        )}
+        </div>
       </div>
 
       <section className="services-section">
