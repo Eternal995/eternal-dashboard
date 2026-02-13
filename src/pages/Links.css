@@ -264,9 +264,16 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  align-items: stretch;
 }
 
 .record-form {
+  width: 100%;
+  max-width: 100%;
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -356,9 +363,13 @@
 .record-list {
   display: grid;
   gap: 1.5rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: start;
 }
 
 .record-card {
+  width: 100%;
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -369,7 +380,15 @@
   gap: 0.75rem;
 }
 
+.page-content.page-content-wide {
+  max-width: 1200px;
+  width: 100%;
+}
+
 .record-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: #475569;
   font-size: 0.9rem;
 }
@@ -378,6 +397,23 @@
   margin: 0;
   color: #111827;
   line-height: 1.6;
+  word-break: break-word;
+}
+
+.record-delete {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: white;
+  color: #dc2626;
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.record-delete:hover {
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.18);
 }
 
 .record-images {
@@ -398,6 +434,7 @@
   max-width: 1200px;
   margin: 3.5rem auto 2.5rem;  /* 增加上下边距 */
   padding: 0 2rem;
+  width: 100%;
 }
 
 .search-title {

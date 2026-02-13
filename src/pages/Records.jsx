@@ -64,6 +64,27 @@ function Records() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("确定要删除这条记录吗？")) {
+      return;
+    }
+
+    try {
+      setError("");
+      const response = await fetch(`/api/records?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("删除失败");
+      }
+
+      await loadRecords();
+    } catch (err) {
+      setError("删除失败，请稍后再试。");
+    }
+  };
+
   return (
     <div className="links-page">
       <nav className="nav">
@@ -90,7 +111,7 @@ function Records() {
         <div className="nav-spacer"></div>
       </nav>
 
-      <main className="page-content">
+      <main className="page-content page-content-wide">
         <section className="records-section">
           <h2 className="section-title">📝 记录</h2>
           <form className="record-form" onSubmit={handleSubmit}>
@@ -107,7 +128,9 @@ function Records() {
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(event) => setFiles(Array.from(event.target.files || []))}
+                  onChange={(event) =>
+                    setFiles(Array.from(event.target.files || []))
+                  }
                 />
               </label>
               <button className="record-submit" type="submit" disabled={saving}>
@@ -134,12 +157,25 @@ function Records() {
                         hour12: false,
                       })}
                     </span>
+                    <button
+                      type="button"
+                      className="record-delete"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      删除
+                    </button>
                   </header>
-                  {item.content && <p className="record-content">{item.content}</p>}
+                  {item.content && (
+                    <p className="record-content">{item.content}</p>
+                  )}
                   {item.images && item.images.length > 0 && (
                     <div className="record-images">
                       {item.images.map((image, index) => (
-                        <img key={index} src={image} alt={item.content || "记录图片"} />
+                        <img
+                          key={index}
+                          src={image}
+                          alt={item.content || "记录图片"}
+                        />
                       ))}
                     </div>
                   )}

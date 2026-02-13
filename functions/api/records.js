@@ -24,6 +24,23 @@ const groupRecords = (rows) => {
   return Array.from(map.values());
 };
 
+const getKeyFromUrl = (url, publicBase) => {
+  if (publicBase && url.startsWith(publicBase)) {
+    const trimmed = url.slice(publicBase.length);
+    return trimmed.startsWith("/") ? trimmed.slice(1) : trimmed;
+  }
+
+  if (url.startsWith("http")) {
+    try {
+      return new URL(url).pathname.replace(/^\//, "");
+    } catch (err) {
+      return url;
+    }
+  }
+
+  return url;
+};
+
 export async function onRequest({ request, env }) {
   if (request.method === "GET") {
     const result = await env.RECORDS_DB.prepare(
@@ -64,6 +81,35 @@ export async function onRequest({ request, env }) {
         "INSERT INTO record_images (record_id, url) VALUES (?1, ?2)"
       ).bind(recordId, url).run();
     }
+
+    return jsonResponse({ ok: true });
+  }
+
+  if (request.method === "DELETE") {
+    const url = new URL(request.url);
+    const id = Number(url.searchParams.get("id"));
+    if (!Number.isInteger(id) || id <= 0) {
+      return jsonResponse({ error: "invalid_id" }, 400);
+    }
+
+    const publicBase = env.R2_PUBLIC_BASE_URL || "";
+    const imagesResult = await env.RECORDS_DB.prepare(
+      "SELECT url FROM record_images WHERE record_id = ?1"
+    ).bind(id).all();
+
+    for (const row of imagesResult.results || []) {
+      const key = getKeyFromUrl(row.url, publicBase);
+      if (key) {
+        await env.RECORDS_BUCKET.delete(key);
+      }
+    }
+
+    await env.RECORDS_DB.prepare(
+      "DELETE FROM record_images WHERE record_id = ?1"
+    ).bind(id).run();
+    await env.RECORDS_DB.prepare("DELETE FROM records WHERE id = ?1")
+      .bind(id)
+      .run();
 
     return jsonResponse({ ok: true });
   }
