@@ -52,6 +52,13 @@ const generalGames = [
     iconKey: "download",
     color: "#8b5cf6",
   },
+  {
+    name: "ResetEra",
+    description: "游戏论坛",
+    url: "https://www.resetera.com/",
+    iconKey: "community",
+    color: "#64748b",
+  },
 ];
 
 const genshinGames = [
@@ -75,6 +82,20 @@ const genshinGames = [
     url: "https://space.bilibili.com/431073645",
     iconKey: "video",
     color: "#06b6d4",
+  },
+  {
+    name: "原神互动地图",
+    description: "官方地图",
+    url: "https://act.mihoyo.com/ys/app/interactive-map/index.html?lang=zh-cn#/map/2?shown_types=223&center=3467.07,-10261.94&zoom=0.50",
+    iconKey: "compass",
+    color: "#0ea5e9",
+  },
+  {
+    name: "Wonders of the World",
+    description: "成就查询",
+    url: "https://cocogoat.work/achievement/wonders-of-the-world",
+    iconKey: "sparkle",
+    color: "#f59e0b",
   },
 ];
 
@@ -113,6 +134,20 @@ const wutheringWaves = [
     url: "https://scoreecho.loping151.site/",
     iconKey: "sparkle",
     color: "#f97316",
+  },
+  {
+    name: "鸣潮地图",
+    description: "Kuro 地图",
+    url: "https://www.kurobbs.com/mc/map/",
+    iconKey: "compass",
+    color: "#0ea5e9",
+  },
+  {
+    name: "鸣潮文档",
+    description: "资料表",
+    url: "https://www.kdocs.cn/l/chWXEqFmFGvu",
+    iconKey: "download",
+    color: "#10b981",
   },
 ];
 

@@ -76,6 +76,13 @@ const downloadTools = [
     iconKey: "download",
     color: "#f59e0b",
   },
+  {
+    name: "动漫花园",
+    description: "资源下载",
+    url: "https://dmhy.anoneko.com/",
+    iconKey: "download",
+    color: "#6366f1",
+  },
 ];
 
 const otherTools = [
@@ -127,6 +134,20 @@ const otherTools = [
     url: "https://www.toronto.ca/services-payments/property-taxes-utilities/property-tax/property-tax-lookup/",
     iconKey: "globe",
     color: "#f59e0b",
+  },
+  {
+    name: "Massgrave",
+    description: "脚本工具",
+    url: "https://massgrave.dev/",
+    iconKey: "download",
+    color: "#111827",
+  },
+  {
+    name: "DiskPrices",
+    description: "硬盘比价",
+    url: "https://diskprices.com/?locale=ca&condition=new&disk_types=external_hdd,external_hdd25,internal_hdd,internal_hdd25,internal_sshd,internal_sas,external_ssd,internal_ssd,m2_ssd,m2_nvme,u2",
+    iconKey: "globe",
+    color: "#0f766e",
   },
 ];
 

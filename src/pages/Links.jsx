@@ -67,6 +67,27 @@ const commonSites = [
     iconKey: "mail",
     color: "#ea4335",
   },
+  {
+    name: "Outlook",
+    description: "收件箱",
+    url: "https://outlook.live.com/mail/0/",
+    iconKey: "mail",
+    color: "#2563eb",
+  },
+  {
+    name: "Pixiv",
+    description: "插画社区",
+    url: "https://www.pixiv.net/",
+    iconKey: "community",
+    color: "#3b82f6",
+  },
+  {
+    name: "GitHub",
+    description: "个人主页",
+    url: "https://github.com/Eternal995",
+    iconKey: "globe",
+    color: "#111827",
+  },
 ];
 
 function Links() {
