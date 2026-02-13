@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import "./Links.css";
 import LineIcon from "../components/LineIcon";
 
@@ -59,9 +59,6 @@ function Links() {
   const [searchEngine, setSearchEngine] = useState("google");
   const [searchMode, setSearchMode] = useState("web");
   const [searchQuery, setSearchQuery] = useState("");
-  const [imageFileName, setImageFileName] = useState("");
-  const [isImageDragOver, setIsImageDragOver] = useState(false);
-  const imageInputRef = useRef(null);
 
   const getEngineName = (engine) => {
     const map = {
@@ -115,19 +112,8 @@ function Links() {
     setSearchQuery("");
   };
 
-  const handleImageFiles = (fileList) => {
-    if (!fileList || fileList.length === 0) {
-      return;
-    }
-
-    const file = fileList[0];
-    setImageFileName(file.name);
-
-    if (imageInputRef.current) {
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      imageInputRef.current.files = dataTransfer.files;
-    }
+  const handleOpenImageSearch = () => {
+    window.open("https://images.google.com/", "_blank");
   };
 
   return (
@@ -240,45 +226,18 @@ function Links() {
         </div>
 
         {searchMode === "image" && (
-          <form
-            className="image-search-form"
-            action="https://www.google.com/searchbyimage/upload"
-            method="POST"
-            encType="multipart/form-data"
-            target="_blank"
-          >
-            <label
-              className={`image-drop ${isImageDragOver ? "drag-over" : ""}`}
-              onDragOver={(event) => {
-                event.preventDefault();
-                setIsImageDragOver(true);
-              }}
-              onDragLeave={() => setIsImageDragOver(false)}
-              onDrop={(event) => {
-                event.preventDefault();
-                setIsImageDragOver(false);
-                handleImageFiles(event.dataTransfer.files);
-              }}
-            >
-              <input
-                ref={imageInputRef}
-                type="file"
-                name="encoded_image"
-                accept="image/*"
-                onChange={(event) => handleImageFiles(event.target.files)}
-              />
-              <span>拖拽图片或点击上传</span>
-              {imageFileName && (
-                <span className="image-file">{imageFileName}</span>
-              )}
-            </label>
+          <div className="image-search-form">
             <div className="image-actions">
-              <button className="image-submit" type="submit">
-                上传搜图
+              <button
+                className="image-submit"
+                type="button"
+                onClick={handleOpenImageSearch}
+              >
+                打开 Google 搜图
               </button>
-              <span className="image-note">仅支持 Google</span>
+              <span className="image-note">在页面内自行上传图片</span>
             </div>
-          </form>
+          </div>
         )}
       </div>
 

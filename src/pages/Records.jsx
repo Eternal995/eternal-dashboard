@@ -10,6 +10,7 @@ function Records() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [isDropActive, setIsDropActive] = useState(false);
+  const [activeRecord, setActiveRecord] = useState(null);
 
   const loadRecords = async () => {
     try {
@@ -70,7 +71,7 @@ function Records() {
       return;
     }
     const incoming = Array.from(fileList).filter((file) =>
-      file.type.startsWith("image/")
+      file.type.startsWith("image/"),
     );
     if (incoming.length === 0) {
       return;
@@ -101,6 +102,14 @@ function Records() {
     } catch (err) {
       setError("删除失败，请稍后再试。");
     }
+  };
+
+  const openRecord = (record) => {
+    setActiveRecord(record);
+  };
+
+  const closeRecord = () => {
+    setActiveRecord(null);
   };
 
   return (
@@ -173,17 +182,18 @@ function Records() {
                 <p className="record-hint">已选择 {files.length} 张图片</p>
                 <div className="record-preview-grid">
                   {files.map((file, index) => (
-                    <div key={`${file.name}-${index}`} className="record-preview">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={file.name}
-                      />
+                    <div
+                      key={`${file.name}-${index}`}
+                      className="record-preview"
+                    >
+                      <img src={URL.createObjectURL(file)} alt={file.name} />
                       <button
                         type="button"
                         className="record-preview-remove"
                         onClick={() => removeFile(index)}
+                        aria-label="移除图片"
                       >
-                        取消
+                        X
                       </button>
                     </div>
                   ))}
@@ -200,7 +210,19 @@ function Records() {
               <p className="record-hint">还没有记录</p>
             ) : (
               records.map((item) => (
-                <article key={item.id} className="record-card">
+                <article
+                  key={item.id}
+                  className="record-card"
+                  onClick={() => openRecord(item)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openRecord(item);
+                    }
+                  }}
+                >
                   <header className="record-meta">
                     <span>
                       {new Date(item.createdAt).toLocaleString("zh-CN", {
@@ -210,7 +232,10 @@ function Records() {
                     <button
                       type="button"
                       className="record-delete"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleDelete(item.id);
+                      }}
                     >
                       删除
                     </button>
@@ -235,6 +260,50 @@ function Records() {
           </div>
         </section>
       </main>
+
+      {activeRecord && (
+        <div
+          className="record-modal"
+          onClick={closeRecord}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="record-modal-content"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <header className="record-modal-header">
+              <span>
+                {new Date(activeRecord.createdAt).toLocaleString("zh-CN", {
+                  hour12: false,
+                })}
+              </span>
+              <button
+                type="button"
+                className="record-modal-close"
+                onClick={closeRecord}
+                aria-label="关闭"
+              >
+                X
+              </button>
+            </header>
+            {activeRecord.content && (
+              <p className="record-modal-text">{activeRecord.content}</p>
+            )}
+            {activeRecord.images && activeRecord.images.length > 0 && (
+              <div className="record-modal-images">
+                {activeRecord.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={activeRecord.content || "记录图片"}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <footer className="footer">
         <p>© 2026 eternal995.com · 自部署 · 自用</p>
