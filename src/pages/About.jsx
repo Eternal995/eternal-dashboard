@@ -18,6 +18,9 @@ function About() {
           <Link to="/games" className="nav-link">
             游戏
           </Link>
+          <Link to="/records" className="nav-link">
+            记录
+          </Link>
           <Link to="/about" className="nav-link">
             关于
           </Link>

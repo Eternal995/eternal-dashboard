@@ -59,6 +59,9 @@ function Games() {
           <Link to="/games" className="nav-link">
             游戏
           </Link>
+          <Link to="/records" className="nav-link">
+            记录
+          </Link>
           <Link to="/about" className="nav-link">
             关于
           </Link>
@@ -81,7 +84,10 @@ function Games() {
               >
                 <div
                   className="service-icon"
-                  style={{ backgroundColor: `${service.color}20`, color: service.color }}
+                  style={{
+                    backgroundColor: `${service.color}20`,
+                    color: service.color,
+                  }}
                 >
                   <LineIcon name={service.iconKey} className="line-icon" />
                 </div>
@@ -111,7 +117,10 @@ function Games() {
               >
                 <div
                   className="service-icon"
-                  style={{ backgroundColor: `${service.color}20`, color: service.color }}
+                  style={{
+                    backgroundColor: `${service.color}20`,
+                    color: service.color,
+                  }}
                 >
                   <LineIcon name={service.iconKey} className="line-icon" />
                 </div>
@@ -141,7 +150,10 @@ function Games() {
               >
                 <div
                   className="service-icon"
-                  style={{ backgroundColor: `${service.color}20`, color: service.color }}
+                  style={{
+                    backgroundColor: `${service.color}20`,
+                    color: service.color,
+                  }}
                 >
                   <LineIcon name={service.iconKey} className="line-icon" />
                 </div>
@@ -171,7 +183,10 @@ function Games() {
               >
                 <div
                   className="service-icon"
-                  style={{ backgroundColor: `${service.color}20`, color: service.color }}
+                  style={{
+                    backgroundColor: `${service.color}20`,
+                    color: service.color,
+                  }}
                 >
                   <LineIcon name={service.iconKey} className="line-icon" />
                 </div>
