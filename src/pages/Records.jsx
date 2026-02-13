@@ -9,6 +9,7 @@ function Records() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [isDropActive, setIsDropActive] = useState(false);
 
   const loadRecords = async () => {
     try {
@@ -64,6 +65,23 @@ function Records() {
     }
   };
 
+  const appendFiles = (fileList) => {
+    if (!fileList || fileList.length === 0) {
+      return;
+    }
+    const incoming = Array.from(fileList).filter((file) =>
+      file.type.startsWith("image/")
+    );
+    if (incoming.length === 0) {
+      return;
+    }
+    setFiles((prev) => [...prev, ...incoming]);
+  };
+
+  const removeFile = (indexToRemove) => {
+    setFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("确定要删除这条记录吗？")) {
       return;
@@ -101,6 +119,9 @@ function Records() {
           <Link to="/games" className="nav-link">
             游戏
           </Link>
+          <Link to="/keyboard" className="nav-link">
+            键盘
+          </Link>
           <Link to="/records" className="nav-link">
             记录
           </Link>
@@ -121,24 +142,53 @@ function Records() {
               value={content}
               onChange={(event) => setContent(event.target.value)}
             />
+            <label
+              className={`record-drop ${isDropActive ? "drag-over" : ""}`}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setIsDropActive(true);
+              }}
+              onDragLeave={() => setIsDropActive(false)}
+              onDrop={(event) => {
+                event.preventDefault();
+                setIsDropActive(false);
+                appendFiles(event.dataTransfer.files);
+              }}
+            >
+              <span>拖拽图片到这里，或点击选择</span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(event) => appendFiles(event.target.files)}
+              />
+            </label>
             <div className="record-actions">
-              <label className="record-upload">
-                上传图片
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={(event) =>
-                    setFiles(Array.from(event.target.files || []))
-                  }
-                />
-              </label>
               <button className="record-submit" type="submit" disabled={saving}>
                 {saving ? "保存中..." : "保存记录"}
               </button>
             </div>
             {files.length > 0 && (
-              <p className="record-hint">已选择 {files.length} 张图片</p>
+              <div className="record-selected">
+                <p className="record-hint">已选择 {files.length} 张图片</p>
+                <div className="record-preview-grid">
+                  {files.map((file, index) => (
+                    <div key={`${file.name}-${index}`} className="record-preview">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={file.name}
+                      />
+                      <button
+                        type="button"
+                        className="record-preview-remove"
+                        onClick={() => removeFile(index)}
+                      >
+                        取消
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
             {error && <p className="record-error">{error}</p>}
           </form>

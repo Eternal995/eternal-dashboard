@@ -18,6 +18,9 @@ function About() {
           <Link to="/games" className="nav-link">
             游戏
           </Link>
+          <Link to="/keyboard" className="nav-link">
+            键盘
+          </Link>
           <Link to="/records" className="nav-link">
             记录
           </Link>
@@ -31,7 +34,13 @@ function About() {
       <main className="page-content">
         <div className="page-hero">
           <h2>🧾 关于</h2>
-          <p>这里可以写你的个人简介、站点用途、更新记录或联系方式。</p>
+          <p>
+            这里是 Eternal 的个人站点，主要用来集中管理常用链接、工具与笔记。
+            目前内容以自用为主，后续会逐步补充更完整的介绍、更新记录与联系方式。
+          </p>
+          <p>
+            你可以把这里当作一个轻量的数字仪表盘：需要什么、常用什么，就收纳在这里。
+          </p>
         </div>
       </main>
 

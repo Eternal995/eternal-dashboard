@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./Links.css";
 import LineIcon from "../components/LineIcon";
 
@@ -57,7 +57,11 @@ const commonSites = [
 
 function Links() {
   const [searchEngine, setSearchEngine] = useState("google");
+  const [searchMode, setSearchMode] = useState("web");
   const [searchQuery, setSearchQuery] = useState("");
+  const [imageFileName, setImageFileName] = useState("");
+  const [isImageDragOver, setIsImageDragOver] = useState(false);
+  const imageInputRef = useRef(null);
 
   const getEngineName = (engine) => {
     const map = {
@@ -80,6 +84,52 @@ function Links() {
     return urls[engine];
   };
 
+  const getImageSearchUrl = (engine, query) => {
+    const encoded = encodeURIComponent(query);
+    const urls = {
+      google: `https://www.google.com/search?tbm=isch&q=${encoded}`,
+      baidu: `https://image.baidu.com/search/index?tn=baiduimage&word=${encoded}`,
+      bing: `https://www.bing.com/images/search?q=${encoded}`,
+      yandex: `https://yandex.com/images/search?text=${encoded}`,
+    };
+    return urls[engine];
+  };
+
+  const getPlaceholder = () => {
+    const name = getEngineName(searchEngine);
+    return searchMode === "image"
+      ? `在 ${name} 中搜图片...`
+      : `在 ${name} 中搜索...`;
+  };
+
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
+      return;
+    }
+
+    const url =
+      searchMode === "image"
+        ? getImageSearchUrl(searchEngine, searchQuery)
+        : getSearchUrl(searchEngine, searchQuery);
+    window.open(url, "_blank");
+    setSearchQuery("");
+  };
+
+  const handleImageFiles = (fileList) => {
+    if (!fileList || fileList.length === 0) {
+      return;
+    }
+
+    const file = fileList[0];
+    setImageFileName(file.name);
+
+    if (imageInputRef.current) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      imageInputRef.current.files = dataTransfer.files;
+    }
+  };
+
   return (
     <div className="links-page">
       <nav className="nav">
@@ -95,6 +145,9 @@ function Links() {
           </Link>
           <Link to="/games" className="nav-link">
             游戏
+          </Link>
+          <Link to="/keyboard" className="nav-link">
+            键盘
           </Link>
           <Link to="/records" className="nav-link">
             记录
@@ -150,35 +203,83 @@ function Links() {
           </button>
         </div>
 
+        <div className="search-mode">
+          <button
+            className={`mode-btn ${searchMode === "web" ? "active" : ""}`}
+            type="button"
+            onClick={() => setSearchMode("web")}
+          >
+            网页
+          </button>
+          <button
+            className={`mode-btn ${searchMode === "image" ? "active" : ""}`}
+            type="button"
+            onClick={() => setSearchMode("image")}
+          >
+            图片
+          </button>
+        </div>
+
         {/* 搜索框 */}
         <div className="search-box-container">
           <input
             type="text"
             className="search-input"
-            placeholder={`在 ${getEngineName(searchEngine)} 中搜索...`}
+            placeholder={getPlaceholder()}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && searchQuery.trim()) {
-                const url = getSearchUrl(searchEngine, searchQuery);
-                window.open(url, "_blank");
-                setSearchQuery("");
+              if (e.key === "Enter") {
+                handleSearch();
               }
             }}
           />
-          <button
-            className="search-button"
-            onClick={() => {
-              if (searchQuery.trim()) {
-                const url = getSearchUrl(searchEngine, searchQuery);
-                window.open(url, "_blank");
-                setSearchQuery("");
-              }
-            }}
-          >
+          <button className="search-button" onClick={handleSearch}>
             搜索
           </button>
         </div>
+
+        {searchMode === "image" && (
+          <form
+            className="image-search-form"
+            action="https://www.google.com/searchbyimage/upload"
+            method="POST"
+            encType="multipart/form-data"
+            target="_blank"
+          >
+            <label
+              className={`image-drop ${isImageDragOver ? "drag-over" : ""}`}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setIsImageDragOver(true);
+              }}
+              onDragLeave={() => setIsImageDragOver(false)}
+              onDrop={(event) => {
+                event.preventDefault();
+                setIsImageDragOver(false);
+                handleImageFiles(event.dataTransfer.files);
+              }}
+            >
+              <input
+                ref={imageInputRef}
+                type="file"
+                name="encoded_image"
+                accept="image/*"
+                onChange={(event) => handleImageFiles(event.target.files)}
+              />
+              <span>拖拽图片或点击上传</span>
+              {imageFileName && (
+                <span className="image-file">{imageFileName}</span>
+              )}
+            </label>
+            <div className="image-actions">
+              <button className="image-submit" type="submit">
+                上传搜图
+              </button>
+              <span className="image-note">仅支持 Google</span>
+            </div>
+          </form>
+        )}
       </div>
 
       <section className="services-section">

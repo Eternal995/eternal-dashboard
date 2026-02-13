@@ -10,15 +10,71 @@ const onlineTools = [
     iconKey: "tv",
     color: "#e11d48",
   },
+  {
+    name: "斗鱼",
+    description: "直播",
+    url: "https://www.douyu.com/directory/all",
+    iconKey: "tv",
+    color: "#f97316",
+  },
+  {
+    name: "虎牙",
+    description: "直播",
+    url: "https://www.huya.com/l",
+    iconKey: "tv",
+    color: "#f59e0b",
+  },
+  {
+    name: "Twitch",
+    description: "直播",
+    url: "https://www.twitch.tv/directory",
+    iconKey: "tv",
+    color: "#8b5cf6",
+  },
+  {
+    name: "欧乐影视",
+    description: "影视站",
+    url: "https://www.olevod.com/",
+    iconKey: "video",
+    color: "#0ea5e9",
+  },
 ];
 
 const downloadTools = [
   {
     name: "TSDM",
-    description: "论坛与资源",
+    description: "天使动漫",
     url: "https://www.tsdm39.com/forum.php",
     iconKey: "download",
     color: "#2563eb",
+  },
+  {
+    name: "Gamer520",
+    description: "游戏下载",
+    url: "https://sway.cloud.microsoft/1zyVegf0n3cHdR8o",
+    iconKey: "download",
+    color: "#0ea5e9",
+  },
+  {
+    name: "Nyaa",
+    description: "动画下载",
+    url: "https://nyaa.si/",
+    iconKey: "download",
+    color: "#10b981",
+  },
+  {
+    name: "漫画",
+    description: "漫画下载 Kindle",
+    url: "https://kzo.moe/",
+    iconKey: "download",
+    color: "#f43f5e",
+  },
+  {
+    name: "South Plus",
+    description: "南plus",
+    url: "https://www.south-plus.net/index.php",
+    iconKey: "download",
+    color: "#f59e0b",
   },
 ];
 
@@ -30,7 +86,50 @@ const otherTools = [
     iconKey: "folder",
     color: "#4299e1",
   },
+  {
+    name: "iLovePDF",
+    description: "PDF 工具",
+    url: "https://www.ilovepdf.com/split_pdf",
+    iconKey: "download",
+    color: "#ef4444",
+  },
+  {
+    name: "OpenRouter",
+    description: "模型聚合",
+    url: "https://openrouter.ai/",
+    iconKey: "globe",
+    color: "#0ea5e9",
+  },
+  {
+    name: "AM5主板",
+    description: "在线表格",
+    url: "https://docs.google.com/spreadsheets/d/1NQHkDEcgDPm34Mns3C93K6SJoBnua-x9O-y_6hv8sPs/edit?gid=1502922237#gid=1502922237",
+    iconKey: "globe",
+    color: "#22c55e",
+  },
+  {
+    name: "路由器",
+    description: "本地管理",
+    url: "http://192.168.0.1/webpages/index.html#/login",
+    iconKey: "globe",
+    color: "#64748b",
+  },
+  {
+    name: "SteamDB",
+    description: "游戏数据",
+    url: "https://steamdb.info/",
+    iconKey: "globe",
+    color: "#1f2937",
+  },
+  {
+    name: "Toronto Tax",
+    description: "税务查询",
+    url: "https://www.toronto.ca/services-payments/property-taxes-utilities/property-tax/property-tax-lookup/",
+    iconKey: "globe",
+    color: "#f59e0b",
+  },
 ];
+
 
 function Tools() {
   return (
@@ -48,6 +147,9 @@ function Tools() {
           </Link>
           <Link to="/games" className="nav-link">
             游戏
+          </Link>
+          <Link to="/keyboard" className="nav-link">
+            键盘
           </Link>
           <Link to="/records" className="nav-link">
             记录
@@ -158,6 +260,7 @@ function Tools() {
             ))}
           </div>
         </section>
+
       </main>
 
       <footer className="footer">
