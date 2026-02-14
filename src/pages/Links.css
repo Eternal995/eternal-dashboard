@@ -591,6 +591,84 @@
   object-fit: cover;
 }
 
+.record-auth {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 76px;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 950;
+}
+
+.record-auth-card {
+  width: min(420px, 100%);
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.record-auth-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+
+.record-auth-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.record-auth-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.record-auth-input {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 1rem;
+  outline: none;
+}
+
+.record-auth-input:focus {
+  border-color: rgba(15, 118, 110, 0.7);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.record-auth-submit {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 118, 110, 0.5);
+  background: #0f766e;
+  color: #f8fafc;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.record-auth-submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.record-auth-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 0.9rem;
+}
 /* 搜索栏 - 放大版 */
 .search-section {
   max-width: 1200px;
@@ -853,6 +931,10 @@
 
   .search-section {
     margin: 2rem auto 1.5rem;
+  }
+  .record-auth {
+    top: 120px;
+    padding: 1.5rem;
   }
   
   .search-title {

@@ -2,6 +2,41 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Links.css";
 
+const AUTH_STORAGE_KEY = "recordsAuth";
+const AUTH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+const readStoredToken = () => {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const data = JSON.parse(raw);
+    if (!data || !data.token || !data.expiresAt) {
+      return null;
+    }
+    if (Date.now() > data.expiresAt) {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      return null;
+    }
+    return data.token;
+  } catch (err) {
+    return null;
+  }
+};
+
+const storeToken = (token) => {
+  const payload = {
+    token,
+    expiresAt: Date.now() + AUTH_TTL_MS,
+  };
+  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
+};
+
+const clearToken = () => {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+};
+
 function Records() {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
@@ -11,12 +46,28 @@ function Records() {
   const [error, setError] = useState("");
   const [isDropActive, setIsDropActive] = useState(false);
   const [activeRecord, setActiveRecord] = useState(null);
+  const [authToken, setAuthToken] = useState(() => readStoredToken());
+  const [authInput, setAuthInput] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authChecking, setAuthChecking] = useState(false);
+
+  const getAuthHeaders = (token) =>
+    token ? { Authorization: `Bearer ${token}` } : {};
 
   const loadRecords = async () => {
     try {
       setLoading(true);
       setError("");
-      const response = await fetch("/api/records");
+      const response = await fetch("/api/records", {
+        headers: getAuthHeaders(authToken),
+      });
+      if (response.status === 401) {
+        clearToken();
+        setAuthToken(null);
+        setAuthError("口令不正确，请重新输入。");
+        setRecords([]);
+        return;
+      }
       if (!response.ok) {
         throw new Error("加载失败");
       }
@@ -30,8 +81,47 @@ function Records() {
   };
 
   useEffect(() => {
-    loadRecords();
-  }, []);
+    if (authToken) {
+      loadRecords();
+    } else {
+      setLoading(false);
+    }
+  }, [authToken]);
+
+  const handleAuthSubmit = async (event) => {
+    event.preventDefault();
+    const token = authInput.trim();
+    if (!token) {
+      setAuthError("请输入口令。");
+      return;
+    }
+
+    try {
+      setAuthChecking(true);
+      setAuthError("");
+      setLoading(true);
+      const response = await fetch("/api/records", {
+        headers: getAuthHeaders(token),
+      });
+      if (response.status === 401) {
+        setAuthError("口令不正确，请重新输入。");
+        return;
+      }
+      if (!response.ok) {
+        throw new Error("验证失败");
+      }
+      const data = await response.json();
+      storeToken(token);
+      setAuthToken(token);
+      setAuthInput("");
+      setRecords(data.records || []);
+    } catch (err) {
+      setAuthError("验证失败，请稍后再试。");
+    } finally {
+      setAuthChecking(false);
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -49,8 +139,16 @@ function Records() {
 
       const response = await fetch("/api/records", {
         method: "POST",
+        headers: getAuthHeaders(authToken),
         body: formData,
       });
+
+      if (response.status === 401) {
+        clearToken();
+        setAuthToken(null);
+        setAuthError("口令已失效，请重新输入。");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("保存失败");
@@ -92,7 +190,15 @@ function Records() {
       setError("");
       const response = await fetch(`/api/records?id=${id}`, {
         method: "DELETE",
+        headers: getAuthHeaders(authToken),
       });
+
+      if (response.status === 401) {
+        clearToken();
+        setAuthToken(null);
+        setAuthError("口令已失效，请重新输入。");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("删除失败");
@@ -260,6 +366,32 @@ function Records() {
           </div>
         </section>
       </main>
+
+      {!authToken && (
+        <div className="record-auth" role="dialog" aria-modal="true">
+          <div className="record-auth-card">
+            <h3 className="record-auth-title">记录已加密</h3>
+            <p className="record-auth-desc">输入口令后查看</p>
+            <form className="record-auth-form" onSubmit={handleAuthSubmit}>
+              <input
+                className="record-auth-input"
+                type="password"
+                placeholder="输入口令"
+                value={authInput}
+                onChange={(event) => setAuthInput(event.target.value)}
+              />
+              <button
+                className="record-auth-submit"
+                type="submit"
+                disabled={authChecking}
+              >
+                {authChecking ? "验证中..." : "解锁"}
+              </button>
+            </form>
+            {authError && <p className="record-auth-error">{authError}</p>}
+          </div>
+        </div>
+      )}
 
       {activeRecord && (
         <div

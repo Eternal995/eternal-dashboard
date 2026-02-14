@@ -1,0 +1,12 @@
+name = "eternal-dashboard"
+compatibility_date = "2026-02-14"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "RECORDS_DB"
+database_name = "eternal995"
+database_id = "18ee4b17-b9fc-4a7b-8ce7-386fb9440e3d"
+
+[[r2_buckets]]
+binding = "RECORDS_BUCKET"
+bucket_name = "eternal995"
