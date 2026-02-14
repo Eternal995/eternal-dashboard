@@ -4,13 +4,6 @@ import LineIcon from "../components/LineIcon";
 
 const generalGames = [
   {
-    name: "Hakush",
-    description: "通用资料站",
-    url: "https://hakush.in/",
-    iconKey: "compass",
-    color: "#0ea5e9",
-  },
-  {
     name: "Nexus Mods",
     description: "模组资源",
     url: "https://www.nexusmods.com/",
@@ -148,6 +141,13 @@ const wutheringWaves = [
     url: "https://www.kdocs.cn/l/chWXEqFmFGvu",
     iconKey: "download",
     color: "#10b981",
+  },
+  {
+    name: "Encore",
+    description: "通用资料站",
+    url: "https://encore.moe/?lang=zh-Hans",
+    iconKey: "compass",
+    color: "#0ea5e9",
   },
 ];
 
