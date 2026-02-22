@@ -83,6 +83,13 @@ const downloadTools = [
     iconKey: "download",
     color: "#6366f1",
   },
+  {
+    name: "VCB-S",
+    description: "视频资源",
+    url: "https://vcb-s.com/",
+    iconKey: "download",
+    color: "#dc2626",
+  },
 ];
 
 const otherTools = [
